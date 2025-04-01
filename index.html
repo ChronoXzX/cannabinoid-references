@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cannabinoid Research References</title>
     <style>
         body {
@@ -11,71 +11,85 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background: #f0f4e8;
-            overflow-x: hidden;
             min-height: 100vh;
-            position: relative;
-        }
-
-        /* Leaf container */
-        .leaf-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
+            background: linear-gradient(160deg, #f0f4f8, #e0e9f2);
+            overflow-x: hidden;
         }
 
         .container {
             background-color: rgba(255, 255, 255, 0.98);
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
             position: relative;
-            z-index: 2;
+            z-index: 1;
         }
 
-        .leaf {
+        .title {
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2c5e3a;
+            font-size: 2.5rem;
+            margin: 1rem 0 2rem;
+            letter-spacing: 1.5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .title::after {
+            content: '';
             position: absolute;
-            opacity: 0.4;
-            width: 40px;
-            animation: leaf-float 12s infinite linear;
-            filter: drop-shadow(2px 2px 2px rgba(67, 101, 39, 0.2));
+            width: 60px;
+            height: 3px;
+            background: #3d7a4b;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
         }
 
-        @keyframes leaf-float {
-            0% { 
+        .title:hover {
+            color: #245832;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+
+        .pill {
+            position: fixed;
+            animation: pill-fall 6s linear infinite;
+            pointer-events: none;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.2));
+        }
+
+        @keyframes pill-fall {
+            0% {
                 transform: translateY(-100vh) translateX(-10vw) rotate(0deg);
-                opacity: 0.6;
+                opacity: 0.9;
             }
-            100% { 
-                transform: translateY(100vh) translateX(10vw) rotate(360deg);
+            100% {
+                transform: translateY(100vh) translateX(10vw) rotate(720deg);
                 opacity: 0;
             }
         }
 
-        /* Reference styles remain unchanged */
         .reference {
             margin-bottom: 25px;
             padding: 20px;
-            border-left: 4px solid #436527;
-            background-color: #f8f9fa;
-            transition: transform 0.2s;
+            border-left: 4px solid #3d7a4b;
+            background-color: rgba(248, 249, 250, 0.95);
+            transition: transform 0.3s ease;
         }
+
         .reference:hover {
             transform: translateX(5px);
         }
     </style>
 </head>
 <body>
-    <!-- Leaf container -->
-    <div class="leaf-container" id="leafContainer"></div>
-
-    <!-- Content container -->
     <div class="container">
-        <h1>Cannabinoid Research References</h1>
+        <h1 class="title">Cannabinoid Research References</h1>
         <div class="references">
             <!-- Reference 1 -->
             <div class="reference" id="ref1">
@@ -209,44 +223,63 @@
 
 <!-- Animated Background Elements -->
     
-<!-- Leaves will be inserted here by JavaScript -->
-       <script>
-        function createLeaf() {
-            const leafContainer = document.getElementById('leafContainer');
-            const leaf = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            const leafPaths = [
-                '<path d="M12 2C9 8 2 9 2 15s7 7 10 13c3-6 10-7 10-13s-7-7-10-13z" fill="#436527"/>',
-                '<path d="M12 2C8 5 5 9 5 14s4 9 7 13c3-4 7-9 7-13S16 5 12 2z" fill="#436527"/>'
-            ];
+  <script>
+        const pillShapes = [
+            // Capsule shape with outline
+            `<rect x="8" y="4" width="8" height="16" rx="4" 
+                  fill="#007bff" stroke="black" stroke-width="1.5"/>`,
             
-            leaf.setAttribute("class", "leaf");
-            leaf.setAttribute("viewBox", "0 0 24 24");
-            leaf.innerHTML = leafPaths[Math.floor(Math.random() * leafPaths.length)];
+            // Round tablet with outline
+            `<circle cx="12" cy="12" r="6" 
+                    fill="#dc3545" stroke="black" stroke-width="1.5"/>`,
             
-            // Random positioning and timing
-            leaf.style.left = `${Math.random() * 100}%`;
-            leaf.style.width = `${30 + Math.random() * 30}px`;
-            leaf.style.animationDelay = `${Math.random() * 2}s`;
+            // Scored tablet with outline
+            `<circle cx="12" cy="12" r="8" 
+                    fill="#28a745" stroke="black" stroke-width="1.5"/>
+             <path d="M12 4L12 20M4 12L20 12" 
+                   stroke="white" stroke-width="2"/>`,
             
-            leafContainer.appendChild(leaf);
+            // Oval pill with outline
+            `<rect x="6" y="4" width="12" height="16" rx="8" 
+                  fill="#ffc107" stroke="black" stroke-width="1.5"/>`
+        ];
+
+        const pillColors = ["#007bff", "#dc3545", "#28a745", "#ffc107", "#17a2b8", "#6610f2"];
+
+        function createPill() {
+            const pill = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            pill.setAttribute("class", "pill");
+            pill.setAttribute("viewBox", "0 0 24 24");
             
-            // Remove leaf after animation
-            setTimeout(() => leaf.remove(), 12000);
+            // Random pill properties
+            const size = 20 + Math.random() * 30;
+            const shape = pillShapes[Math.floor(Math.random() * pillShapes.length)];
+            const color = pillColors[Math.floor(Math.random() * pillColors.length)];
+
+            pill.innerHTML = shape.replace(/fill="[^"]+"/g, (match) => {
+                return match.startsWith('fill="white') ? match : `fill="${color}"`;
+            });
+            
+            pill.style.width = `${size}px`;
+            pill.style.left = `${Math.random() * 100}%`;
+            pill.style.animationDuration = `${4 + Math.random() * 4}s`;
+            
+            document.body.appendChild(pill);
+
+            // Remove pill after animation
+            setTimeout(() => pill.remove(), 6000);
         }
 
-        function startAnimation() {
-            // Create initial leaves
+        function startPillAnimation() {
+            // Create initial pills
             for(let i = 0; i < 8; i++) {
-                setTimeout(createLeaf, i * 1500);
+                setTimeout(createPill, i * 800);
             }
-            // Continue creating leaves
-            setInterval(createLeaf, 3000);
+            // Continuous creation
+            setInterval(createPill, 1200);
         }
 
-        // Start animation after slight delay
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(startAnimation, 500);
-        });
+        window.addEventListener('DOMContentLoaded', startPillAnimation);
     </script>
 </body>
 </html>
