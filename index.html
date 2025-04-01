@@ -17,6 +17,7 @@
                 #f0f4e8;
             background-size: 80px 80px;
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
         .container {
@@ -40,33 +41,27 @@
             transform: translateX(5px);
         }
 
-        .qr-container {
-            text-align: center;
-            margin: 40px 0;
-            padding: 20px;
-            background-color: #ecf0f1;
-            border-radius: 10px;
-        }
-
         /* Cannabinoid Animations */
         .molecule {
             position: fixed;
             opacity: 0.1;
             z-index: -1;
             pointer-events: none;
+            animation: molecule-rotate 40s infinite linear;
         }
 
         .leaf {
             position: fixed;
-            opacity: 0.1;
-            animation: leaf-float 20s infinite linear;
+            opacity: 0.3;
             z-index: -1;
-            width: 30px;
+            width: 40px;
+            animation: leaf-float 15s infinite linear;
+            filter: brightness(1.1);
         }
 
         @keyframes leaf-float {
-            0% { transform: translateY(-100vh) rotate(0deg); }
-            100% { transform: translateY(100vh) rotate(360deg); }
+            0% { transform: translateY(-100vh) translateX(-10vw) rotate(0deg); }
+            100% { transform: translateY(100vh) translateX(10vw) rotate(360deg); }
         }
 
         @keyframes molecule-rotate {
@@ -217,7 +212,8 @@
         </div>
     </div>
 
- <svg class="molecule" style="left:10%;top:20%;width:120px;animation:molecule-rotate 40s infinite linear" viewBox="0 0 100 100">
+<!-- Animated Background Elements -->
+    <svg class="molecule" style="left:10%;top:20%;width:120px;" viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="8" fill="#436527"/>
         <line x1="50" y1="50" x2="35" y2="35" stroke="#436527" stroke-width="2"/>
         <circle cx="35" cy="35" r="5" fill="#8A9A5B"/>
@@ -225,60 +221,41 @@
         <circle cx="65" cy="35" r="5" fill="#8A9A5B"/>
     </svg>
 
-    <svg class="leaf" style="left:15%;animation-delay:2s;width:40px" viewBox="0 0 24 24">
-        <path d="M12 2C9 8 2 9 2 15s7 7 10 13c3-6 10-7 10-13s-7-7-10-13z" fill="#436527"/>
-    </svg>
-
     <div class="container">
-        <!-- Your existing content remains unchanged -->
-        <!-- ... -->
+        <!-- Your references content remains unchanged -->
+        <!-- ... [all your reference divs] ... -->
     </div>
 
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script>
-        // QR Code Generator
-        const websiteUrl = document.getElementById('website-url');
-        const qrcode = new QRCode(document.getElementById("qrcode"), {
-            width: 200,
-            height: 200,
-            colorDark : "#436527",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
-
-        function makeQRCode() {
-            qrcode.makeCode(websiteUrl.value);
-        }
-        window.onload = makeQRCode;
-        websiteUrl.addEventListener('input', makeQRCode);
-
-        // Mobile-friendly animation setup
+        // Create falling leaves
         function createLeaves() {
-            const leafSVG = '<path d="M12 2C8 5 5 9 5 14s4 9 7 13c3-4 7-9 7-13S16 5 12 2z" fill="#436527" fill-opacity="0.1"/>';
-            for(let i = 0; i < 5; i++) {
+            const leafSVGs = [
+                '<path d="M12 2C9 8 2 9 2 15s7 7 10 13c3-6 10-7 10-13s-7-7-10-13z" fill="#436527"/>',
+                '<path d="M12 2C8 5 5 9 5 14s4 9 7 13c3-4 7-9 7-13S16 5 12 2z" fill="#436527"/>'
+            ];
+
+            for(let i = 0; i < 8; i++) {
                 const leaf = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                 leaf.setAttribute("class", "leaf");
                 leaf.setAttribute("viewBox", "0 0 24 24");
-                leaf.innerHTML = leafSVG;
+                leaf.innerHTML = leafSVGs[Math.floor(Math.random() * leafSVGs.length)];
                 leaf.style.left = `${Math.random() * 100}%`;
-                leaf.style.animationDelay = `${Math.random() * 10}s`;
+                leaf.style.animationDelay = `${Math.random() * 15}s`;
                 leaf.style.width = `${30 + Math.random() * 20}px`;
                 document.body.appendChild(leaf);
             }
         }
 
-        // Mobile performance optimization
-        if ('requestAnimationFrame' in window) {
-            window.addEventListener('load', createLeaves);
-        }
-
-        // Handle mobile resize
-        window.addEventListener('resize', () => {
-            document.querySelectorAll('.leaf').forEach(leaf => leaf.remove());
+        // Initialize animations
+        window.addEventListener('load', () => {
             createLeaves();
+            
+            // Reset leaves on resize
+            window.addEventListener('resize', () => {
+                document.querySelectorAll('.leaf').forEach(leaf => leaf.remove());
+                createLeaves();
+            });
         });
     </script>
-    <!-- Web Animations Polyfill for better mobile support -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.3.2/web-animations.min.js"></script>
 </body>
 </html>
