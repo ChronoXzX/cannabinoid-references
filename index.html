@@ -18,6 +18,7 @@
             background-size: 80px 80px;
             overflow-x: hidden;
             min-height: 100vh;
+            position: relative;
         }
 
         .container {
@@ -27,8 +28,35 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             position: relative;
+            z-index: 1; /* Content layer */
         }
 
+        /* Leaf animations */
+        .leaf {
+            position: fixed;
+            opacity: 0.3;
+            z-index: 2; /* Higher than container */
+            width: 40px;
+            animation: leaf-float 15s infinite linear;
+            pointer-events: none;
+            mix-blend-mode: multiply;
+        }
+
+        @keyframes leaf-float {
+            0% { 
+                transform: translateY(-100vh) translateX(-10vw) rotate(0deg);
+                opacity: 0.4;
+            }
+            50% { 
+                opacity: 0.3;
+            }
+            100% { 
+                transform: translateY(100vh) translateX(10vw) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Keep existing reference styles */
         .reference {
             margin-bottom: 25px;
             padding: 20px;
@@ -36,37 +64,8 @@
             background-color: #f8f9fa;
             transition: transform 0.2s;
         }
-
         .reference:hover {
             transform: translateX(5px);
-        }
-
-        /* Cannabinoid Animations */
-        .molecule {
-            position: fixed;
-            opacity: 0.1;
-            z-index: -1;
-            pointer-events: none;
-            animation: molecule-rotate 40s infinite linear;
-        }
-
-        .leaf {
-            position: fixed;
-            opacity: 0.3;
-            z-index: -1;
-            width: 40px;
-            animation: leaf-float 15s infinite linear;
-            filter: brightness(1.1);
-        }
-
-        @keyframes leaf-float {
-            0% { transform: translateY(-100vh) translateX(-10vw) rotate(0deg); }
-            100% { transform: translateY(100vh) translateX(10vw) rotate(360deg); }
-        }
-
-        @keyframes molecule-rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -213,44 +212,41 @@
     </div>
 
 <!-- Animated Background Elements -->
-    <svg class="molecule" style="left:10%;top:20%;width:120px;" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="8" fill="#436527"/>
-        <line x1="50" y1="50" x2="35" y2="35" stroke="#436527" stroke-width="2"/>
-        <circle cx="35" cy="35" r="5" fill="#8A9A5B"/>
-        <line x1="50" y1="50" x2="65" y2="35" stroke="#436527" stroke-width="2"/>
-        <circle cx="65" cy="35" r="5" fill="#8A9A5B"/>
-    </svg>
-
+    
+<!-- Leaves will be inserted here by JavaScript -->
+    
+    <!-- Content container -->
     <div class="container">
-        <!-- Your references content remains unchanged -->
-        <!-- ... [all your reference divs] ... -->
+        <h1>Cannabinoid Research References</h1>
+        <div class="references">
+            <!-- Your references here -->
+        </div>
     </div>
 
     <script>
-        // Create falling leaves
         function createLeaves() {
-            const leafSVGs = [
+            const leafPaths = [
                 '<path d="M12 2C9 8 2 9 2 15s7 7 10 13c3-6 10-7 10-13s-7-7-10-13z" fill="#436527"/>',
                 '<path d="M12 2C8 5 5 9 5 14s4 9 7 13c3-4 7-9 7-13S16 5 12 2z" fill="#436527"/>'
             ];
 
-            for(let i = 0; i < 8; i++) {
+            for(let i = 0; i < 12; i++) {
                 const leaf = document.createElementNS("http://www.w3.org/2000/svg", "svg");
                 leaf.setAttribute("class", "leaf");
                 leaf.setAttribute("viewBox", "0 0 24 24");
-                leaf.innerHTML = leafSVGs[Math.floor(Math.random() * leafSVGs.length)];
+                leaf.innerHTML = leafPaths[Math.floor(Math.random() * leafPaths.length)];
+                
                 leaf.style.left = `${Math.random() * 100}%`;
+                leaf.style.width = `${30 + Math.random() * 30}px`;
                 leaf.style.animationDelay = `${Math.random() * 15}s`;
-                leaf.style.width = `${30 + Math.random() * 20}px`;
+                leaf.style.animationDuration = `${12 + Math.random() * 8}s`;
+                
                 document.body.appendChild(leaf);
             }
         }
 
-        // Initialize animations
         window.addEventListener('load', () => {
             createLeaves();
-            
-            // Reset leaves on resize
             window.addEventListener('resize', () => {
                 document.querySelectorAll('.leaf').forEach(leaf => leaf.remove());
                 createLeaves();
