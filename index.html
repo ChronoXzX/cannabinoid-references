@@ -223,63 +223,39 @@
 
 <!-- Animated Background Elements -->
     
-  <script>
-        const pillShapes = [
-            // Capsule shape with outline
-            `<rect x="8" y="4" width="8" height="16" rx="4" 
-                  fill="#007bff" stroke="black" stroke-width="1.5"/>`,
+   <script>
+        (function() {
+            'use strict';
             
-            // Round tablet with outline
-            `<circle cx="12" cy="12" r="6" 
-                    fill="#dc3545" stroke="black" stroke-width="1.5"/>`,
-            
-            // Scored tablet with outline
-            `<circle cx="12" cy="12" r="8" 
-                    fill="#28a745" stroke="black" stroke-width="1.5"/>
-             <path d="M12 4L12 20M4 12L20 12" 
-                   stroke="white" stroke-width="2"/>`,
-            
-            // Oval pill with outline
-            `<rect x="6" y="4" width="12" height="16" rx="8" 
-                  fill="#ffc107" stroke="black" stroke-width="1.5"/>`
-        ];
+            const pillShapes = [
+                // Capsule
+                '<rect x="6" y="2" width="12" height="20" rx="6" fill="#007bff" stroke="#000"/>',
+                // Round pill
+                '<circle cx="12" cy="12" r="8" fill="#dc3545" stroke="#000"/>'
+            ];
 
-        const pillColors = ["#007bff", "#dc3545", "#28a745", "#ffc107", "#17a2b8", "#6610f2"];
+            function createPill() {
+                const pill = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                pill.setAttribute("viewBox", "0 0 24 24");
+                pill.style.width = `${30 + Math.random() * 30}px`;
+                pill.style.left = `${Math.random() * 100}%`;
+                pill.style.animationDuration = `${4 + Math.random() * 4}s`;
+                pill.classList.add('pill');
+                pill.innerHTML = pillShapes[Math.floor(Math.random() * pillShapes.length)];
+                document.body.appendChild(pill);
 
-        function createPill() {
-            const pill = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            pill.setAttribute("class", "pill");
-            pill.setAttribute("viewBox", "0 0 24 24");
-            
-            // Random pill properties
-            const size = 20 + Math.random() * 30;
-            const shape = pillShapes[Math.floor(Math.random() * pillShapes.length)];
-            const color = pillColors[Math.floor(Math.random() * pillColors.length)];
-
-            pill.innerHTML = shape.replace(/fill="[^"]+"/g, (match) => {
-                return match.startsWith('fill="white') ? match : `fill="${color}"`;
-            });
-            
-            pill.style.width = `${size}px`;
-            pill.style.left = `${Math.random() * 100}%`;
-            pill.style.animationDuration = `${4 + Math.random() * 4}s`;
-            
-            document.body.appendChild(pill);
-
-            // Remove pill after animation
-            setTimeout(() => pill.remove(), 6000);
-        }
-
-        function startPillAnimation() {
-            // Create initial pills
-            for(let i = 0; i < 8; i++) {
-                setTimeout(createPill, i * 800);
+                // Remove after animation
+                setTimeout(() => pill.remove(), (4 + Math.random() * 4) * 1000);
             }
-            // Continuous creation
-            setInterval(createPill, 1200);
-        }
 
-        window.addEventListener('DOMContentLoaded', startPillAnimation);
+            // Start animation
+            function init() {
+                setInterval(createPill, 800);
+                createPill(); // Initial pill
+            }
+
+            window.addEventListener('load', init);
+        })();
     </script>
 </body>
 </html>
