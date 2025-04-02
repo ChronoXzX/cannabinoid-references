@@ -6,47 +6,84 @@
     <title>Cannabinoid Research References</title>
     <style>
         body {
-            margin: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
             min-height: 100vh;
-            background: #f0f4f8;
-            font-family: Arial, sans-serif;
-            position: relative;
-            overflow: hidden;
+            background: linear-gradient(160deg, #f0f4f8, #e0e9f2);
+            overflow-x: hidden;
         }
 
         .container {
-            background: white;
+            background-color: rgba(255, 255, 255, 0.98);
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
             position: relative;
             z-index: 1;
         }
 
+        .title {
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2c5e3a;
+            font-size: 2.5rem;
+            margin: 1rem 0 2rem;
+            letter-spacing: 1.5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .title::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background: #3d7a4b;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .title:hover {
+            color: #245832;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+
         .pill {
             position: fixed;
-            z-index: 2;
-            animation: pill-fall linear infinite;
+            animation: pill-fall 6s linear infinite;
             pointer-events: none;
+            z-index: 2;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.2));
         }
 
         @keyframes pill-fall {
             0% {
-                transform: translate(-50%, -100vh) rotate(0deg);
-                opacity: 1;
+                transform: translateY(-100vh) translateX(-10vw) rotate(0deg);
+                opacity: 0.9;
             }
             100% {
-                transform: translate(-50%, 100vh) rotate(360deg);
+                transform: translateY(100vh) translateX(10vw) rotate(720deg);
                 opacity: 0;
             }
         }
 
-        .title {
-            text-align: center;
-            color: #2c5e3a;
-            font-size: 2.5rem;
-            margin-bottom: 30px;
+        .reference {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-left: 4px solid #3d7a4b;
+            background-color: rgba(248, 249, 250, 0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .reference:hover {
+            transform: translateX(5px);
         }
     </style>
 </head>
@@ -185,39 +222,63 @@
     </div>
 
 <!-- Animated Background Elements -->   
-  <script>
-        (function() {
-            'use strict';
+    <script>
+        const pillShapes = [
+            // Capsule shape with outline
+            `<rect x="8" y="4" width="8" height="16" rx="4" 
+                  fill="#007bff" stroke="black" stroke-width="1.5"/>`,
             
-            const pillShapes = [
-                // Capsule
-                '<rect x="6" y="2" width="12" height="20" rx="6" fill="#007bff" stroke="#000"/>',
-                // Round pill
-                '<circle cx="12" cy="12" r="8" fill="#dc3545" stroke="#000"/>'
-            ];
+            // Round tablet with outline
+            `<circle cx="12" cy="12" r="6" 
+                    fill="#dc3545" stroke="black" stroke-width="1.5"/>`,
+            
+            // Scored tablet with outline
+            `<circle cx="12" cy="12" r="8" 
+                    fill="#28a745" stroke="black" stroke-width="1.5"/>
+             <path d="M12 4L12 20M4 12L20 12" 
+                   stroke="white" stroke-width="2"/>`,
+            
+            // Oval pill with outline
+            `<rect x="6" y="4" width="12" height="16" rx="8" 
+                  fill="#ffc107" stroke="black" stroke-width="1.5"/>`
+        ];
 
-            function createPill() {
-                const pill = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                pill.setAttribute("viewBox", "0 0 24 24");
-                pill.style.width = `${30 + Math.random() * 30}px`;
-                pill.style.left = `${Math.random() * 100}%`;
-                pill.style.animationDuration = `${4 + Math.random() * 4}s`;
-                pill.classList.add('pill');
-                pill.innerHTML = pillShapes[Math.floor(Math.random() * pillShapes.length)];
-                document.body.appendChild(pill);
+        const pillColors = ["#007bff", "#dc3545", "#28a745", "#ffc107", "#17a2b8", "#6610f2"];
 
-                // Remove after animation
-                setTimeout(() => pill.remove(), (4 + Math.random() * 4) * 1000);
+        function createPill() {
+            const pill = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            pill.setAttribute("class", "pill");
+            pill.setAttribute("viewBox", "0 0 24 24");
+            
+            // Random pill properties
+            const size = 20 + Math.random() * 30;
+            const shape = pillShapes[Math.floor(Math.random() * pillShapes.length)];
+            const color = pillColors[Math.floor(Math.random() * pillColors.length)];
+
+            pill.innerHTML = shape.replace(/fill="[^"]+"/g, (match) => {
+                return match.startsWith('fill="white') ? match : `fill="${color}"`;
+            });
+            
+            pill.style.width = `${size}px`;
+            pill.style.left = `${Math.random() * 100}%`;
+            pill.style.animationDuration = `${4 + Math.random() * 4}s`;
+            
+            document.body.appendChild(pill);
+
+            // Remove pill after animation
+            setTimeout(() => pill.remove(), 6000);
+        }
+
+        function startPillAnimation() {
+            // Create initial pills
+            for(let i = 0; i < 8; i++) {
+                setTimeout(createPill, i * 800);
             }
+            // Continuous creation
+            setInterval(createPill, 1200);
+        }
 
-            // Start animation
-            function init() {
-                setInterval(createPill, 800);
-                createPill(); // Initial pill
-            }
-
-            window.addEventListener('load', init);
-        })();
+        window.addEventListener('DOMContentLoaded', startPillAnimation);
     </script>
 </body>
 </html>
