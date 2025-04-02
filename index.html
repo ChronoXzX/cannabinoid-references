@@ -57,19 +57,18 @@
 
         .pill {
             position: fixed;
-            animation: pill-fall 6s linear infinite;
-            pointer-events: none;
             z-index: 2;
-            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.2));
+            animation: pill-fall linear infinite;
+            pointer-events: none;
         }
 
         @keyframes pill-fall {
             0% {
-                transform: translateY(-100vh) translateX(-10vw) rotate(0deg);
-                opacity: 0.9;
+                transform: translate(-50%, -100vh) rotate(0deg);
+                opacity: 1;
             }
             100% {
-                transform: translateY(100vh) translateX(10vw) rotate(720deg);
+                transform: translate(-50%, 100vh) rotate(360deg);
                 opacity: 0;
             }
         }
