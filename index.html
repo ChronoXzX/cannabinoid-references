@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cannabinoid Research References</title>
@@ -20,20 +17,11 @@
             position: relative;
         }
 
-        .container {
-            background-color: rgba(255, 255, 255, 0.7); /* More transparent */
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 1;
-            backdrop-filter: blur(2px); /* Optional blur effect */
-        }
-
+        /* Original Title Styles */
         .title {
             text-align: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: rgba(44, 94, 58, 0.9); /* Semi-transparent text */
+            color: #2c5e3a;
             font-size: 2.5rem;
             margin: 1rem 0 2rem;
             letter-spacing: 1.5px;
@@ -47,55 +35,53 @@
             position: absolute;
             width: 60px;
             height: 3px;
-            background: rgba(61, 122, 75, 0.7); /* Semi-transparent line */
+            background: #3d7a4b;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             border-radius: 2px;
         }
 
-        .pill {
-            position: fixed;
-            animation: pill-fall 6s linear infinite;
-            pointer-events: none;
-            z-index: 0; /* Behind content */
-            opacity: 0.7;
-            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.2));
-        }
-
-        @keyframes pill-fall {
-            0% {
-                transform: translateY(-100vh) translateX(-10vw) rotate(0deg);
-                opacity: 0.9;
-            }
-            100% {
-                transform: translateY(100vh) translateX(10vw) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
+        /* Transparent References */
         .reference {
             margin-bottom: 25px;
             padding: 20px;
-            border-left: 4px solid rgba(61, 122, 75, 0.7);
-            background-color: rgba(248, 249, 250, 0.7); /* More transparent */
+            border-left: 4px solid transparent;
             transition: all 0.3s ease;
-            position: relative;
+            background-color: transparent;
         }
 
-        /* Restored Hover Effect */
         .reference:hover {
             transform: translateX(10px);
-            background-color: rgba(248, 249, 250, 0.9);
+            background-color: rgba(255, 255, 255, 0.9);
+            border-left-color: #3d7a4b;
+            box-shadow: 4px 4px 15px rgba(0,0,0,0.1);
             cursor: pointer;
-            box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Original Pill Styles with Floating Animation */
+        .pill {
+            position: fixed;
+            animation: pill-float 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.1));
+            opacity: 0.3;
+        }
+
+        @keyframes pill-float {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-40px) rotate(5deg); }
         }
     </style>
 </head>
 <body>
+    <!-- Floating Pills Container -->
+    <div id="pills-container"></div>
+
+    <!-- Content -->
     <div class="container">
         <h1 class="title">Cannabinoid Research References</h1>
-        
         <!-- Paste all your references here (ref1 to ref16) -->
         <div class="references">
             <!-- Reference 1 -->
@@ -229,61 +215,50 @@
     </div>
 
 <!-- Animated Background Elements -->   
-    <script>
-    // Replace existing script with this optimized version
-    function createPill() {
-        const pill = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        pill.setAttribute("class", "pill");
-        pill.setAttribute("viewBox", "0 0 24 24");
-        
-        // Simplified shape selection
-        const shapes = [
-            `<rect x="6" y="4" width="12" height="16" rx="8" fill="rgba(0,123,255,0.4)" stroke="black" stroke-width="1.5"/>`,
-            `<circle cx="12" cy="12" r="8" fill="rgba(220,53,69,0.4)" stroke="black" stroke-width="1.5"/>`
-        ];
-        
-        pill.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
-        pill.style.cssText = `
-            width: ${30 + Math.random() * 40}px;
-            left: ${Math.random() * 100}%;
-            animation: pill-fall ${6 + Math.random() * 4}s linear infinite;
-        `;
-        
-        document.body.appendChild(pill);
-        setTimeout(() => pill.remove(), 10000);
-    }
+   <script>
+        function createPills() {
+            const pillShapes = [
+                // Original capsule shape
+                `<rect x="8" y="4" width="8" height="16" rx="4" 
+                     fill="{color}" stroke="black" stroke-width="1.5"/>`,
+                
+                // Original round tablet
+                `<circle cx="12" cy="12" r="6" 
+                        fill="{color}" stroke="black" stroke-width="1.5"/>`,
+                
+                // Original scored tablet
+                `<circle cx="12" cy="12" r="8" 
+                        fill="{color}" stroke="black" stroke-width="1.5"/>
+                 <path d="M12 4L12 20M4 12L20 12" 
+                       stroke="white" stroke-width="2"/>`,
+                
+                // Original oval pill
+                `<rect x="6" y="4" width="12" height="16" rx="8" 
+                      fill="{color}" stroke="black" stroke-width="1.5"/>`
+            ];
 
-    // Start animation with fallback
-    document.addEventListener('DOMContentLoaded', () => {
-        setInterval(createPill, 800);
-        createPill(); // Initial pill
-    }
-                             
-     // Mobile touch detection
-    document.body.addEventListener('touchstart', function() {}, false);
-</script>
+            const colors = ["#4CAF50", "#2196F3", "#E91E63", "#FFC107", "#9C27B0"];
+            
+            for(let i = 0; i < 20; i++) {
+                const pill = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                pill.innerHTML = pillShapes[Math.floor(Math.random() * pillShapes.length)]
+                    .replace("{color}", colors[Math.floor(Math.random() * colors.length)]);
+                
+                pill.setAttribute("class", "pill");
+                pill.setAttribute("viewBox", "0 0 24 24");
+                pill.style.cssText = `
+                    width: ${30 + Math.random() * 40}px;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    animation-delay: ${Math.random() * 4}s;
+                    opacity: ${0.2 + Math.random() * 0.3};
+                `;
 
-<style>
-    /* Prevent mobile zoom */
-    html {
-        touch-action: manipulation;
-        -webkit-text-size-adjust: 100%;
-    }                         
-                             
-    .container {
-    background-color: rgba(255,255,255,0.85) !important;
-    position: relative;
-}
+                document.getElementById('pills-container').appendChild(pill);
+            }
+        }
 
-.pill {
-    will-change: transform; /* Improve animation performance */
-    animation: pill-fall 8s linear infinite !important;
-}
-
-@keyframes pill-fall {
-    0% { transform: translateY(-100vh) translateX(-20vw); }
-    100% { transform: translateY(150vh) translateX(20vw); }
-});
-</script>
+        window.addEventListener('DOMContentLoaded', createPills);
+    </script>
 </body>
 </html>
