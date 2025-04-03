@@ -257,7 +257,33 @@
     document.addEventListener('DOMContentLoaded', () => {
         setInterval(createPill, 800);
         createPill(); // Initial pill
-    });
+    }
+                             
+     // Mobile touch detection
+    document.body.addEventListener('touchstart', function() {}, false);
+</script>
+
+<style>
+    /* Prevent mobile zoom */
+    html {
+        touch-action: manipulation;
+        -webkit-text-size-adjust: 100%;
+    }                         
+                             
+    .container {
+    background-color: rgba(255,255,255,0.85) !important;
+    position: relative;
+}
+
+.pill {
+    will-change: transform; /* Improve animation performance */
+    animation: pill-fall 8s linear infinite !important;
+}
+
+@keyframes pill-fall {
+    0% { transform: translateY(-100vh) translateX(-20vw); }
+    100% { transform: translateY(150vh) translateX(20vw); }
+});
 </script>
 </body>
 </html>
