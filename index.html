@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cannabinoid Research References</title>
@@ -227,52 +230,34 @@
 
 <!-- Animated Background Elements -->   
     <script>
-        const pillShapes = [
-            `<rect x="8" y="4" width="8" height="16" rx="4" 
-                  fill="#007bff" stroke="black" stroke-width="1.5" fill-opacity="0.4"/>`,
-            
-            `<circle cx="12" cy="12" r="6" 
-                    fill="#dc3545" stroke="black" stroke-width="1.5" fill-opacity="0.4"/>`,
-            
-            `<circle cx="12" cy="12" r="8" 
-                    fill="#28a745" stroke="black" stroke-width="1.5" fill-opacity="0.4"/>
-             <path d="M12 4L12 20M4 12L20 12" 
-                   stroke="white" stroke-width="2" stroke-opacity="0.6"/>`,
-            
-            `<rect x="6" y="4" width="12" height="16" rx="8" 
-                  fill="#ffc107" stroke="black" stroke-width="1.5" fill-opacity="0.4"/>`
+    // Replace existing script with this optimized version
+    function createPill() {
+        const pill = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        pill.setAttribute("class", "pill");
+        pill.setAttribute("viewBox", "0 0 24 24");
+        
+        // Simplified shape selection
+        const shapes = [
+            `<rect x="6" y="4" width="12" height="16" rx="8" fill="rgba(0,123,255,0.4)" stroke="black" stroke-width="1.5"/>`,
+            `<circle cx="12" cy="12" r="8" fill="rgba(220,53,69,0.4)" stroke="black" stroke-width="1.5"/>`
         ];
+        
+        pill.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+        pill.style.cssText = `
+            width: ${30 + Math.random() * 40}px;
+            left: ${Math.random() * 100}%;
+            animation: pill-fall ${6 + Math.random() * 4}s linear infinite;
+        `;
+        
+        document.body.appendChild(pill);
+        setTimeout(() => pill.remove(), 10000);
+    }
 
-        function createPill() {
-            const pill = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-            pill.setAttribute("class", "pill");
-            pill.setAttribute("viewBox", "0 0 24 24");
-            
-            const size = 20 + Math.random() * 30;
-            const shape = pillShapes[Math.floor(Math.random() * pillShapes.length)];
-
-            pill.innerHTML = shape;
-            pill.style.width = `${size}px`;
-            pill.style.left = `${Math.random() * 100}%`;
-            pill.style.animationDuration = `${4 + Math.random() * 4}s`;
-            
-            document.body.appendChild(pill);
-
-            setTimeout(() => pill.remove(), 6000);
-        }
-
-        function startPillAnimation() {
-            // Initial pills
-            for(let i = 0; i < 10; i++) {
-                setTimeout(createPill, i * 300);
-            }
-            // Continuous creation
-            setInterval(createPill, 500);
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(startPillAnimation, 500);
-        });
-    </script>
+    // Start animation with fallback
+    document.addEventListener('DOMContentLoaded', () => {
+        setInterval(createPill, 800);
+        createPill(); // Initial pill
+    });
+</script>
 </body>
 </html>
