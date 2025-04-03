@@ -14,6 +14,7 @@
             min-height: 100vh;
             background: linear-gradient(160deg, #f0f4f8, #e0e9f2);
             overflow-x: hidden;
+            position: relative;
         }
 
         .container {
@@ -49,17 +50,12 @@
             border-radius: 2px;
         }
 
-        .title:hover {
-            color: #245832;
-            text-shadow: 2px 2px 6px rgba(0,0,0,0.15);
-            transition: all 0.3s ease;
-        }
-
         .pill {
             position: fixed;
             animation: pill-fall 6s linear infinite;
             pointer-events: none;
             z-index: 2;
+            opacity: 0.7;
             filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.2));
         }
 
@@ -80,10 +76,6 @@
             border-left: 4px solid #3d7a4b;
             background-color: rgba(248, 249, 250, 0.95);
             transition: transform 0.3s ease;
-        }
-
-        .reference:hover {
-            transform: translateX(5px);
         }
     </style>
 </head>
@@ -222,60 +214,46 @@
     </div>
 
 <!-- Animated Background Elements -->   
-    <script>
+     <script>
         const pillShapes = [
-            // Capsule shape with outline
             `<rect x="8" y="4" width="8" height="16" rx="4" 
-                  fill="#007bff" stroke="black" stroke-width="1.5"/>`,
+                  fill="#007bff" stroke="black" stroke-width="1.5" fill-opacity="0.4"/>`,
             
-            // Round tablet with outline
             `<circle cx="12" cy="12" r="6" 
-                    fill="#dc3545" stroke="black" stroke-width="1.5"/>`,
+                    fill="#dc3545" stroke="black" stroke-width="1.5" fill-opacity="0.4"/>`,
             
-            // Scored tablet with outline
             `<circle cx="12" cy="12" r="8" 
-                    fill="#28a745" stroke="black" stroke-width="1.5"/>
+                    fill="#28a745" stroke="black" stroke-width="1.5" fill-opacity="0.4"/>
              <path d="M12 4L12 20M4 12L20 12" 
-                   stroke="white" stroke-width="2"/>`,
+                   stroke="white" stroke-width="2" stroke-opacity="0.6"/>`,
             
-            // Oval pill with outline
             `<rect x="6" y="4" width="12" height="16" rx="8" 
-                  fill="#ffc107" stroke="black" stroke-width="1.5"/>`
+                  fill="#ffc107" stroke="black" stroke-width="1.5" fill-opacity="0.4"/>`
         ];
-
-        const pillColors = ["#007bff", "#dc3545", "#28a745", "#ffc107", "#17a2b8", "#6610f2"];
 
         function createPill() {
             const pill = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             pill.setAttribute("class", "pill");
             pill.setAttribute("viewBox", "0 0 24 24");
             
-            // Random pill properties
             const size = 20 + Math.random() * 30;
             const shape = pillShapes[Math.floor(Math.random() * pillShapes.length)];
-            const color = pillColors[Math.floor(Math.random() * pillColors.length)];
 
-            pill.innerHTML = shape.replace(/fill="[^"]+"/g, (match) => {
-                return match.startsWith('fill="white') ? match : `fill="${color}"`;
-            });
-            
+            pill.innerHTML = shape;
             pill.style.width = `${size}px`;
             pill.style.left = `${Math.random() * 100}%`;
             pill.style.animationDuration = `${4 + Math.random() * 4}s`;
             
             document.body.appendChild(pill);
 
-            // Remove pill after animation
             setTimeout(() => pill.remove(), 6000);
         }
 
         function startPillAnimation() {
-            // Create initial pills
-            for(let i = 0; i < 8; i++) {
-                setTimeout(createPill, i * 800);
+            setInterval(createPill, 300);
+            for(let i = 0; i < 10; i++) {
+                setTimeout(createPill, i * 500);
             }
-            // Continuous creation
-            setInterval(createPill, 1200);
         }
 
         window.addEventListener('DOMContentLoaded', startPillAnimation);
